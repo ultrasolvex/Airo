@@ -232,7 +232,7 @@ textarea::placeholder {
     <img src="up-arrow.png" alt="إرسال">
   </button>
 </div>
-
+<script src="key.js"></script>
 <script>
 const chat = document.getElementById("chat");
 const msg = document.getElementById("msg");
@@ -253,8 +253,7 @@ function addMsg(text, sender) {
   chat.scrollTop = chat.scrollHeight;
 }
 
-const API_KEY = "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";
-
+const API_KEY = window.__MY_KEY__;
 let messages = [
   {
     role: "system",
@@ -349,5 +348,3 @@ sendBtn.addEventListener("click", () => {
 </script>
 </body>
 </html>
-
-
