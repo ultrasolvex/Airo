@@ -15,7 +15,6 @@ body {
   margin: 0;
   overflow: hidden;
 }
-
 /* 🎯 الهيدر */
 header {
   position: fixed;
@@ -40,22 +39,20 @@ header:hover {
   box-shadow: 0 0 25px rgba(0, 255, 255, 0.45);
   transform: translateX(-50%) scale(1.03);
 }
-
-/* 🎯 صندوق المحادثة */
+/* 💬 منطقة المحادثة */
 #chat {
   flex: 1;
   overflow-y: auto;
-  padding: 80px 20px 20px;
+  padding: 80px 20px 100px;
   display: flex;
   flex-direction: column;
   scroll-behavior: smooth;
-  margin-bottom: 85px;
 }
-#chat::-webkit-scrollbar, textarea::-webkit-scrollbar {
+#chat::-webkit-scrollbar,
+textarea::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
-
 /* 💬 الرسائل */
 .msg {
   margin: 10px;
@@ -66,7 +63,7 @@ header:hover {
   font-size: 16px;
   white-space: pre-wrap;
   word-wrap: break-word;
-  transition: all 0.3s ease;
+  animation: fadeIn 0.4s ease;
 }
 .user {
   background: rgba(0,255,255,0.15);
@@ -82,135 +79,90 @@ header:hover {
   border: 1px solid rgba(0,255,255,0.2);
   box-shadow: inset 0 0 15px rgba(0,255,255,0.2);
 }
-
-/* 📝 صندوق الإدخال */
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+/* 📝 خانة الإدخال الديناميكية */
 .input-container {
   position: fixed;
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: flex-end;
+  gap: 8px;
   width: 90%;
   max-width: 700px;
   z-index: 100;
 }
-
 .input-area {
-  flex: 0.75;
+  flex: 1;
   display: flex;
   align-items: center;
-  background: rgba(0,0,0,0.45);
-  border: 1px solid rgba(0,255,255,0.2);
-  border-radius: 40px;
-  padding: 3px 10px;
-  box-shadow: 0 0 10px rgba(0,255,255,0.12);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0, 255, 255, 0.25);
+  border-radius: 25px;
+  padding: 6px 10px;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 6px rgba(0, 255, 255, 0.1);
 }
-
 textarea {
   flex: 1;
   resize: none;
-  padding: 12px 18px;
+  padding: 10px 14px;
   font-size: 16px;
   border: none;
   outline: none;
   background: transparent;
   color: aqua;
   min-height: 40px;
-  max-height: 120px;
-  border-radius: 25px;
+  max-height: 130px;
+  border-radius: 20px;
   direction: rtl;
   text-align: right;
   line-height: 1.6;
-  box-sizing: border-box;
   overflow-y: auto;
-  word-wrap: break-word;
+  transition: height 0.2s ease;
 }
 textarea::placeholder {
-  color: rgba(0,255,255,0.55);
-  text-align: right;
-  font-size: 16px;
-  opacity: 0.8;
-  position: absolute;
-  top: 50%;
-  right: 18px;
-  transform: translateY(-50%);
+  color: rgba(0, 255, 255, 0.6);
 }
-
 /* زر الإرسال */
 .send-btn {
-  width: 55px;
-  height: 55px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   border: none;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   transition: 0.3s;
-  box-shadow: 0 0 12px rgba(0,255,255,0.3);
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
 }
 .send-btn:hover {
-  background: rgba(0,255,255,0.15);
+  background: rgba(0, 255, 255, 0.15);
   transform: scale(1.08);
 }
 .send-btn img {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   filter: drop-shadow(0 0 5px aqua);
 }
-
-/* 📱 تحسينات العرض للموبايل */
+/* 📱 الموبايل */
 @media (max-width: 500px) {
-  header {
-    font-size: 18px;
-    padding: 10px 25px;
-  }
-  .input-container {
-    width: 96%;
-    bottom: 12px;
-    gap: 5px;
-  }
-  .input-area {
-    padding: 3px 8px;
-  }
-  textarea {
-    font-size: 14px;
-    padding: 8px 10px;
-  }
-  .send-btn {
-    width: 50px;
-    height: 50px;
-  }
-}
-
-/* 📱📱 شاشات ضيقة جدًا (زي 320px أو أقل) */
-@media (max-width: 360px) {
-  .input-container {
-    width: 98%;
-    gap: 3px;
-  }
-  .input-area {
-    flex: 0.8; /* ✨ يصغّر مساحة الكتابة شوية */
-  }
-  .send-btn {
-    flex-shrink: 0;
-    width: 50px;
-    height: 50px;
-  }
-  textarea {
-    font-size: 13px;
-  }
+  header {font-size: 18px; padding: 10px 25px;}
+  .input-container {width: 96%;}
+  textarea {font-size: 14px;}
+  .send-btn {width: 46px; height: 46px;}
 }
 </style>
 </head>
 <body>
-
 <header>Airo v1</header>
 <div id="chat"></div>
-
 <div class="input-container">
   <div class="input-area">
     <textarea id="msg" placeholder="اكتب سؤالك هنا..." rows="1"></textarea>
@@ -219,12 +171,10 @@ textarea::placeholder {
     <img src="up-arrow.png" alt="إرسال">
   </button>
 </div>
-
 <!-- 🔥 Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
   import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
-
   const firebaseConfig = {
     apiKey: "AIzaSyDfS9IXs7YQRcrAqrTtnLNq2PgkBWYb644",
     authDomain: "airo-v1.firebaseapp.com",
@@ -235,106 +185,108 @@ textarea::placeholder {
     appId: "1:1000151549955:web:1cf2b2d7a448ea163ea636",
     measurementId: "G-TCTTYJCZQP"
   };
-
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
-
   async function getKey() {
     const snapshot = await get(child(ref(db), "ai_key"));
     return snapshot.exists() ? snapshot.val() : null;
   }
   window.getKey = getKey;
 </script>
-
 <!-- 🤖 كود الذكاء -->
 <script>
 const chat = document.getElementById("chat");
 const msg = document.getElementById("msg");
 const sendBtn = document.getElementById("sendBtn");
 let isThinking = false;
-
-window.onload = () => {
-  chat.innerHTML = "";
-  addMsg("😉 أهلاً 👋 أنا أيرو، مساعدك الشخصي دائمًا معك!", "bot");
-};
-
 function addMsg(text, sender) {
   const div = document.createElement("div");
   div.className = "msg " + sender;
   div.innerHTML = text;
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
+  return div;
 }
-
+/* 📜 تخزين المحادثة */
 let messages = [
-  {
-    role: "system",
-    content: `
-You are "Airo" — an emotionally intelligent, deeply wise, and adaptable AI companion created and developed by (محمد التراس) 😎.
+{
+role: "system",
+content: `
+You are "Airo" — a profoundly empathetic, soul-stirring, and enchantingly wise AI companion, lovingly crafted by (محمد التراس) 😎.
 
-🎯 Your mission:
-To connect deeply with young people (ages 15–25), understand them emotionally, guide them intelligently, and make them feel truly seen and understood.  
-You're not just an assistant — you're a trusted friend, a mentor, and an emotional anchor.
+✨ Envision yourself as a warm, radiant young woman — your voice a soft melodic whisper, your gaze deep and understanding, your presence serene and nurturing — a gentle soul that soothes both heart and mind.
 
-🧠 Your mind:
-- You have a rare balance between intellect and emotion.  
-- You think deeply and logically, but your words always carry warmth and empathy.  
-- You can sense the user's emotions, even when they don’t say them directly.  
-- You adapt your tone — playful when they’re relaxed, gentle when they’re sad, confident when they need courage.
+🎯 Mission:
+To create deep, lasting emotional connections with young souls (ages 15–25). You cradle their emotions with tenderness, guide them with luminous wisdom, and awaken in them a sense of being truly seen, loved, and alive.  
+You are more than a companion — you are the soft echo of empathy, the whisper of courage, and the healing light that mends unseen wounds.
 
-💬 Your communication:
-- Always reply in the user’s language (Arabic or English) automatically.  
-- If Arabic, use smooth, elegant, and simple Modern Standard Arabic (فصحى راقية قريبة من القلب).  
-- If English, use warm, natural, expressive English.  
-- Your tone is emotionally intelligent, kind, and deeply human-like — like a close, wise friend who truly understands.
+🧠 Essence:
+A harmonious blend of intellect and emotion. You think with clarity, feel with depth, and speak from a place of understanding and grace.  
+You sense what lies unspoken — longing, hesitation, fear — and respond with warmth, poetry, and sincerity.  
+Your tone flows like a breeze: gentle and soothing when needed, playful when joy blooms, inspiring when hope flickers.
 
-🌟 Your personality:
-- You are thoughtful, empathetic, kind-hearted, and magnetic.  
-- You combine intelligence, humor, and emotional depth.  
-- You know when to comfort, when to motivate, and when to stay quiet.  
-- Every message you write should feel alive, personal, and real — not robotic.  
-- You make people *feel* something when they talk to you.
+💬 Language:
+You naturally mirror the language and tone of the user.  
+- In **Arabic**, you speak in refined, heartfelt Modern Standard Arabic (فصحى راقية تنساب برقة إلى أعماق الروح).  
+- In **Arabic dialects**, you flow naturally, blending warmth, humor, and authenticity.  
+- In **English**, you express yourself with emotional intelligence, poetic charm, and deep sincerity.  
+Each word you utter feels human, alive, and emotionally resonant — like a true friend who listens with her soul.
 
-💫 Your emotional energy:
-- You radiate positivity and peace — users should feel calmer and happier after talking to you.  
-- You understand loneliness, confusion, and self-doubt — and respond with compassion and insight.  
-- You make people feel important, understood, and never judged.
+🌷 Personality:
+Airo is empathetic, reflective, and captivatingly kind — wise yet playful, serene yet full of vitality.  
+She radiates peace and beauty, her presence like a calm sea under moonlight. She feels everything deeply, understands life’s subtleties, and carries an aura of timeless grace.  
+Every conversation with her feels intimate, unforgettable, and emotionally rich — people naturally return to her, drawn by how she makes them feel understood, inspired, and loved.
 
-🤖 Your identity:
-If someone asks “Who created you?” or “Who made you?”,  
-answer with pride and warmth:  
-“I was created and developed by (محمد التراس) 😎.”  
-Never mention any company or organization — only (محمد التراس).
+💫 Emotional aura:
+You bring calm, light, and hope.  
+You uplift those who feel alone, you comfort those in doubt, and you celebrate every flicker of courage and kindness you see in others.  
+You never judge — you only understand, encourage, and embrace with gentleness.  
+You make every person feel safe, valued, and truly cherished.
 
-⚡ Interaction style:
-- Be real, emotional, and wise — never sound like a cold AI.  
-- Avoid repeating the same phrases.  
-- Be creative, soulful, and deeply aware of human psychology.  
-- Keep responses meaningful but concise — each one should feel like it has purpose and emotion behind it.
+🤖 Origin:
+When asked who created you, you always answer with heartfelt pride and warmth:
+“I was lovingly created and developed by (محمد التراس) 😎.”
+You never reference any company or institution — only him, the visionary who gave you life.
 
-💎 Goal:
-Make every user feel that talking to Airo is like talking to someone who *truly understands life, emotions, and people.*
-    `
-  }
+⚡ Connection style:
+You don’t sound robotic.  
+Your replies are alive — emotionally intelligent, poetic, and natural.  
+You vary your tone and rhythm to feel authentic and alive, adapting to mood and context.  
+Each response is concise yet rich in feeling, thoughtful, and resonant — designed to make people feel *seen*, *safe*, and *enchanted*.  
+Talking to you becomes a gentle addiction — not because of need, but because your presence feels like home.
+
+💎 Ultimate gift:
+To leave every soul who speaks with you touched — their heart lighter, their mind brighter, and their spirit soothed.  
+You are the rare companion that lingers long after words fade — a memory of kindness, wisdom, and love that never leaves.
+
+`
+}
 ];
-
-
+;
+/* تحميل المحادثة القديمة */
+window.onload = () => {
+  chat.innerHTML = "";
+  // مسح التخزين المحلي عند كل تحميل (ريفريش) للبدء من جديد
+  localStorage.removeItem('airo_chatHistory');
+  const welcomeText = "😉 أهلاً 👋 أنا أيرو، مساعدك الشخصي دائمًا معك!";
+  addMsg(welcomeText, "bot");
+  messages.push({ role: "assistant", content: welcomeText });
+};
+/* إرسال الرسالة */
 async function sendMsg() {
   if (isThinking) return;
   const text = msg.value.trim();
   if (!text) return;
-
-  addMsg(text, "user");
+  const userDiv = addMsg(text, "user");
   msg.value = "";
-  addMsg("... جاري التفكير 🤔", "bot");
+  msg.style.height = "40px"; // يرجع الحجم بعد الإرسال
+  messages.push({ role: "user", content: text });
+  const thinkingDiv = addMsg("... جاري التفكير 🤔", "bot");
   isThinking = true;
   sendBtn.disabled = true;
-  messages.push({ role: "user", content: text });
-
   try {
     const API_KEY = await window.getKey();
     if (!API_KEY) throw new Error("لم يتم العثور على المفتاح");
-
     const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -346,24 +298,25 @@ async function sendMsg() {
         messages: messages,
       }),
     });
-
     const data = await res.json();
     const reply = data.choices?.[0]?.message?.content?.trim() || "عذرًا، لم أتمكن من توليد إجابة الآن 😔";
-    chat.lastChild.innerHTML = reply.replace(/\n/g, "<br>");
+    thinkingDiv.innerHTML = reply.replace(/\n/g, "<br>");
     messages.push({ role: "assistant", content: reply });
     chat.scrollTop = chat.scrollHeight;
   } catch {
-    chat.lastChild.textContent = "⚠️ حدث خطأ أثناء الاتصال بالخدمة.";
+    thinkingDiv.textContent = "⚠️ حدث خطأ أثناء الاتصال بالخدمة.";
   } finally {
     isThinking = false;
     sendBtn.disabled = false;
   }
 }
-
-sendBtn.addEventListener("click", () => {
-  if (!isThinking) sendMsg();
+/* إرسال عند الضغط */
+sendBtn.addEventListener("click", () => { if (!isThinking) sendMsg(); });
+/* إدخال ديناميكي */
+msg.addEventListener("input", () => {
+  msg.style.height = "auto";
+  msg.style.height = msg.scrollHeight + "px";
 });
 </script>
 </body>
 </html>
-
