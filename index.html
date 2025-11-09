@@ -16,7 +16,7 @@ body {
   overflow: hidden;
 }
 
-/* 🎯 شكل الهيدر */
+/* 🎯 الهيدر */
 header {
   position: fixed;
   top: 10px;
@@ -32,13 +32,10 @@ header {
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.25);
   text-align: center;
   white-space: nowrap;
-  width: auto;
   max-width: 95%;
-  overflow: hidden;
   z-index: 1000;
   transition: all 0.3s ease;
 }
-
 header:hover {
   box-shadow: 0 0 25px rgba(0, 255, 255, 0.45);
   transform: translateX(-50%) scale(1.03);
@@ -54,13 +51,10 @@ header:hover {
   scroll-behavior: smooth;
   margin-bottom: 85px;
 }
-
 #chat::-webkit-scrollbar, textarea::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
-#chat { scrollbar-width: none; -ms-overflow-style: none; }
-textarea { scrollbar-width: thin; -ms-overflow-style: none; }
 
 /* 💬 الرسائل */
 .msg {
@@ -131,10 +125,8 @@ textarea {
   line-height: 1.6;
   box-sizing: border-box;
   overflow-y: auto;
-  overflow-x: hidden;
   word-wrap: break-word;
 }
-
 textarea::placeholder {
   color: rgba(0,255,255,0.55);
   text-align: right;
@@ -170,31 +162,46 @@ textarea::placeholder {
   filter: drop-shadow(0 0 5px aqua);
 }
 
-/* 📱 تحسين العرض للموبايل */
+/* 📱 تحسينات العرض للموبايل */
 @media (max-width: 500px) {
   header {
     font-size: 18px;
     padding: 10px 25px;
   }
   .input-container {
-    width: 95%;
+    width: 96%;
     bottom: 12px;
-    gap: 6px;
+    gap: 5px;
   }
   .input-area {
-    padding: 2px 8px;
+    padding: 3px 8px;
+  }
+  textarea {
+    font-size: 14px;
+    padding: 8px 10px;
   }
   .send-btn {
     width: 50px;
     height: 50px;
   }
-  .send-btn img {
-    width: 22px;
-    height: 22px;
+}
+
+/* 📱📱 شاشات ضيقة جدًا (زي 320px أو أقل) */
+@media (max-width: 360px) {
+  .input-container {
+    width: 98%;
+    gap: 3px;
+  }
+  .input-area {
+    flex: 0.8; /* ✨ يصغّر مساحة الكتابة شوية */
+  }
+  .send-btn {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
   }
   textarea {
-    font-size: 14px;
-    padding: 8px 10px;
+    font-size: 13px;
   }
 }
 </style>
@@ -236,7 +243,6 @@ textarea::placeholder {
     const snapshot = await get(child(ref(db), "ai_key"));
     return snapshot.exists() ? snapshot.val() : null;
   }
-
   window.getKey = getKey;
 </script>
 
@@ -313,6 +319,5 @@ sendBtn.addEventListener("click", () => {
   if (!isThinking) sendMsg();
 });
 </script>
-
 </body>
 </html>
