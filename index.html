@@ -15,6 +15,8 @@ body {
   margin: 0;
   overflow: hidden;
 }
+
+/* 🎯 شكل الهيدر */
 header {
   position: fixed;
   top: 10px;
@@ -29,18 +31,38 @@ header {
   color: aqua;
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.25);
   text-align: center;
+  white-space: nowrap;
+  width: auto;
+  max-width: 95%;
+  overflow: hidden;
   z-index: 1000;
   transition: all 0.3s ease;
 }
+
+header:hover {
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.45);
+  transform: translateX(-50%) scale(1.03);
+}
+
+/* 🎯 صندوق المحادثة */
 #chat {
   flex: 1;
   overflow-y: auto;
   padding: 80px 20px 20px;
   display: flex;
   flex-direction: column;
-  margin-bottom: 85px;
   scroll-behavior: smooth;
+  margin-bottom: 85px;
 }
+
+#chat::-webkit-scrollbar, textarea::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+#chat { scrollbar-width: none; -ms-overflow-style: none; }
+textarea { scrollbar-width: thin; -ms-overflow-style: none; }
+
+/* 💬 الرسائل */
 .msg {
   margin: 10px;
   padding: 14px 18px;
@@ -50,19 +72,24 @@ header {
   font-size: 16px;
   white-space: pre-wrap;
   word-wrap: break-word;
+  transition: all 0.3s ease;
 }
 .user {
   background: rgba(0,255,255,0.15);
   color: aqua;
   align-self: flex-end;
   border: 1px solid rgba(0,255,255,0.3);
+  box-shadow: 0 0 10px rgba(0,255,255,0.2);
 }
 .bot {
   background: rgba(0,0,0,0.45);
   color: #8ff;
   align-self: flex-start;
   border: 1px solid rgba(0,255,255,0.2);
+  box-shadow: inset 0 0 15px rgba(0,255,255,0.2);
 }
+
+/* 📝 صندوق الإدخال */
 .input-container {
   position: fixed;
   bottom: 10px;
@@ -75,6 +102,7 @@ header {
   max-width: 700px;
   z-index: 100;
 }
+
 .input-area {
   flex: 1;
   display: flex;
@@ -83,7 +111,9 @@ header {
   border: 1px solid rgba(0,255,255,0.2);
   border-radius: 40px;
   padding: 3px 10px;
+  box-shadow: 0 0 10px rgba(0,255,255,0.12);
 }
+
 textarea {
   flex: 1;
   resize: none;
@@ -93,12 +123,33 @@ textarea {
   outline: none;
   background: transparent;
   color: aqua;
+  min-height: 40px;
+  max-height: 120px;
+  border-radius: 25px;
   direction: rtl;
   text-align: right;
+  line-height: 1.6;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  word-wrap: break-word;
 }
+
+textarea::placeholder {
+  color: rgba(0,255,255,0.55);
+  text-align: right;
+  font-size: 16px;
+  opacity: 0.8;
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%);
+}
+
+/* زر الإرسال */
 .send-btn {
-  width: 50px;
-  height: 50px;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
   border: none;
   background: rgba(0,0,0,0.8);
@@ -106,11 +157,45 @@ textarea {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 0 12px rgba(0,255,255,0.3);
+}
+.send-btn:hover {
+  background: rgba(0,255,255,0.15);
+  transform: scale(1.08);
 }
 .send-btn img {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   filter: drop-shadow(0 0 5px aqua);
+}
+
+/* 📱 تحسين العرض للموبايل */
+@media (max-width: 500px) {
+  header {
+    font-size: 18px;
+    padding: 10px 25px;
+  }
+  .input-container {
+    width: 95%;
+    bottom: 12px;
+    gap: 6px;
+  }
+  .input-area {
+    padding: 2px 8px;
+  }
+  .send-btn {
+    width: 50px;
+    height: 50px;
+  }
+  .send-btn img {
+    width: 22px;
+    height: 22px;
+  }
+  textarea {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
 }
 </style>
 </head>
@@ -128,7 +213,7 @@ textarea {
   </button>
 </div>
 
-<!-- 🔐 تحميل المفتاح من Firebase -->
+<!-- 🔥 Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
   import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
@@ -147,21 +232,15 @@ textarea {
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  window.loadAIKey = async () => {
-    const dbRef = ref(db);
-    const snapshot = await get(child(dbRef, "ai_key"));
-    if (snapshot.exists()) {
-      window.__MY_KEY__ = snapshot.val();
-      console.log("✅ تم تحميل المفتاح من Firebase بنجاح");
-      document.dispatchEvent(new Event("keyReady"));
-    } else {
-      alert("⚠️ لم يتم العثور على المفتاح في قاعدة البيانات!");
-    }
-  };
-  window.loadAIKey();
+  async function getKey() {
+    const snapshot = await get(child(ref(db), "ai_key"));
+    return snapshot.exists() ? snapshot.val() : null;
+  }
+
+  window.getKey = getKey;
 </script>
 
-<!-- 💬 كود الشات -->
+<!-- 🤖 كود الذكاء -->
 <script>
 const chat = document.getElementById("chat");
 const msg = document.getElementById("msg");
@@ -169,6 +248,7 @@ const sendBtn = document.getElementById("sendBtn");
 let isThinking = false;
 
 window.onload = () => {
+  chat.innerHTML = "";
   addMsg("😉 أهلاً 👋 أنا أيرو، مساعدك الشخصي دائمًا معك!", "bot");
 };
 
@@ -180,15 +260,13 @@ function addMsg(text, sender) {
   chat.scrollTop = chat.scrollHeight;
 }
 
-let messages = [
-  {
-    role: "system",
-    content: `
-You are "Airo" — a hyper-intelligent, emotionally aware AI assistant created and developed by (محمد التراس).  
-Reply in the user's language with intelligence, empathy, and warmth.
-    `
-  }
-];
+let messages = [{
+  role: "system",
+  content: `
+أنت "أيرو" — مساعد ذكي جدًا ومتزن عاطفيًا صمّمه وابتكره (محمد التراس) 😎.
+كن حكيمًا، هادئًا، متفهمًا، ورد دائمًا بنفس لغة المستخدم بلغة راقية وواضحة.
+`
+}];
 
 async function sendMsg() {
   if (isThinking) return;
@@ -203,16 +281,14 @@ async function sendMsg() {
   messages.push({ role: "user", content: text });
 
   try {
-    // ننتظر المفتاح لو لسه محملش
-    if (!window.__MY_KEY__) {
-      await new Promise(resolve => document.addEventListener("keyReady", resolve, { once: true }));
-    }
+    const API_KEY = await window.getKey();
+    if (!API_KEY) throw new Error("لم يتم العثور على المفتاح");
 
     const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${window.__MY_KEY__}`,
+        "Authorization": `Bearer ${API_KEY}`,
       },
       body: JSON.stringify({
         model: "openai/gpt-4o-mini",
@@ -224,7 +300,8 @@ async function sendMsg() {
     const reply = data.choices?.[0]?.message?.content?.trim() || "عذرًا، لم أتمكن من توليد إجابة الآن 😔";
     chat.lastChild.innerHTML = reply.replace(/\n/g, "<br>");
     messages.push({ role: "assistant", content: reply });
-  } catch (err) {
+    chat.scrollTop = chat.scrollHeight;
+  } catch {
     chat.lastChild.textContent = "⚠️ حدث خطأ أثناء الاتصال بالخدمة.";
   } finally {
     isThinking = false;
@@ -236,5 +313,6 @@ sendBtn.addEventListener("click", () => {
   if (!isThinking) sendMsg();
 });
 </script>
+
 </body>
 </html>
