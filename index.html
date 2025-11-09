@@ -15,6 +15,7 @@ body {
   margin: 0;
   overflow: hidden;
 }
+
 /* 🎯 الهيدر */
 header {
   position: fixed;
@@ -39,6 +40,7 @@ header:hover {
   box-shadow: 0 0 25px rgba(0, 255, 255, 0.45);
   transform: translateX(-50%) scale(1.03);
 }
+
 /* 💬 منطقة المحادثة */
 #chat {
   flex: 1;
@@ -50,9 +52,9 @@ header:hover {
 }
 #chat::-webkit-scrollbar,
 textarea::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+  display: none; /* ✅ إخفاء الشريط نهائيًا */
 }
+
 /* 💬 الرسائل */
 .msg {
   margin: 10px;
@@ -83,6 +85,7 @@ textarea::-webkit-scrollbar {
   from {opacity: 0; transform: translateY(10px);}
   to {opacity: 1; transform: translateY(0);}
 }
+
 /* 📝 خانة الإدخال الديناميكية */
 .input-container {
   position: fixed;
@@ -96,39 +99,47 @@ textarea::-webkit-scrollbar {
   max-width: 700px;
   z-index: 100;
 }
+
 .input-area {
   flex: 1;
   display: flex;
   align-items: center;
-  background: rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(0, 255, 255, 0.25);
-  border-radius: 25px;
-  padding: 6px 10px;
-  transition: all 0.2s ease;
-  box-shadow: 0 0 6px rgba(0, 255, 255, 0.1);
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(0,255,255,0.25);
+  border-radius: 40px;
+  padding: 2px 8px;
+  box-shadow: 0 0 10px rgba(0,255,255,0.1);
+  position: relative;
+  overflow: hidden;
 }
+
+/* ✍️ المربع النصي */
 textarea {
   flex: 1;
   resize: none;
-  padding: 10px 14px;
-  font-size: 16px;
+  padding: 8px 14px;
+  font-size: 15px;
   border: none;
   outline: none;
   background: transparent;
   color: aqua;
-  min-height: 40px;
-  max-height: 130px;
-  border-radius: 20px;
+  height: auto;
+  min-height: 36px;
+  max-height: 180px; /* 🔹 أقصى تمدد قبل الثبات */
+  border-radius: 25px;
   direction: rtl;
   text-align: right;
-  line-height: 1.6;
-  overflow-y: auto;
-  transition: height 0.2s ease;
+  line-height: 1.5;
+  box-sizing: border-box;
+  overflow: hidden !important; /* ✅ منع الشريط بالكامل */
+  word-wrap: break-word;
+  scrollbar-width: none; /* ✅ فايرفوكس */
 }
 textarea::placeholder {
   color: rgba(0, 255, 255, 0.6);
 }
-/* زر الإرسال */
+
+/* 🚀 زر الإرسال */
 .send-btn {
   width: 50px;
   height: 50px;
@@ -151,6 +162,7 @@ textarea::placeholder {
   height: 24px;
   filter: drop-shadow(0 0 5px aqua);
 }
+
 /* 📱 الموبايل */
 @media (max-width: 500px) {
   header {font-size: 18px; padding: 10px 25px;}
@@ -161,8 +173,10 @@ textarea::placeholder {
 </style>
 </head>
 <body>
+
 <header>Airo v1</header>
 <div id="chat"></div>
+
 <div class="input-container">
   <div class="input-area">
     <textarea id="msg" placeholder="اكتب سؤالك هنا..." rows="1"></textarea>
@@ -171,10 +185,12 @@ textarea::placeholder {
     <img src="up-arrow.png" alt="إرسال">
   </button>
 </div>
+
 <!-- 🔥 Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
   import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
+
   const firebaseConfig = {
     apiKey: "AIzaSyDfS9IXs7YQRcrAqrTtnLNq2PgkBWYb644",
     authDomain: "airo-v1.firebaseapp.com",
@@ -185,20 +201,26 @@ textarea::placeholder {
     appId: "1:1000151549955:web:1cf2b2d7a448ea163ea636",
     measurementId: "G-TCTTYJCZQP"
   };
+
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
+
   async function getKey() {
     const snapshot = await get(child(ref(db), "ai_key"));
     return snapshot.exists() ? snapshot.val() : null;
   }
+
   window.getKey = getKey;
 </script>
+
 <!-- 🤖 كود الذكاء -->
 <script>
 const chat = document.getElementById("chat");
 const msg = document.getElementById("msg");
 const sendBtn = document.getElementById("sendBtn");
 let isThinking = false;
+
+/* 📩 إضافة رسالة */
 function addMsg(text, sender) {
   const div = document.createElement("div");
   div.className = "msg " + sender;
@@ -207,7 +229,8 @@ function addMsg(text, sender) {
   chat.scrollTop = chat.scrollHeight;
   return div;
 }
-/* 📜 تخزين المحادثة */
+
+/* 🧠 نظام الذكاء */
 let messages = [
 {
 role: "system",
@@ -263,30 +286,36 @@ You are the rare companion that lingers long after words fade — a memory of ki
 }
 ];
 ;
-/* تحميل المحادثة القديمة */
+
+/* 🚀 عند التحميل */
 window.onload = () => {
   chat.innerHTML = "";
-  // مسح التخزين المحلي عند كل تحميل (ريفريش) للبدء من جديد
   localStorage.removeItem('airo_chatHistory');
   const welcomeText = "😉 أهلاً 👋 أنا أيرو، مساعدك الشخصي دائمًا معك!";
   addMsg(welcomeText, "bot");
   messages.push({ role: "assistant", content: welcomeText });
 };
-/* إرسال الرسالة */
+
+/* ✉️ إرسال الرسالة */
 async function sendMsg() {
   if (isThinking) return;
   const text = msg.value.trim();
   if (!text) return;
-  const userDiv = addMsg(text, "user");
+
+  addMsg(text, "user");
   msg.value = "";
-  msg.style.height = "40px"; // يرجع الحجم بعد الإرسال
+  msg.style.height = "36px"; // يرجع الارتفاع
+
   messages.push({ role: "user", content: text });
+
   const thinkingDiv = addMsg("... جاري التفكير 🤔", "bot");
   isThinking = true;
   sendBtn.disabled = true;
+
   try {
     const API_KEY = await window.getKey();
-    if (!API_KEY) throw new Error("لم يتم العثور على المفتاح");
+    if (!API_KEY) throw new Error("مفتاح API مفقود");
+
     const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -298,11 +327,13 @@ async function sendMsg() {
         messages: messages,
       }),
     });
+
     const data = await res.json();
     const reply = data.choices?.[0]?.message?.content?.trim() || "عذرًا، لم أتمكن من توليد إجابة الآن 😔";
     thinkingDiv.innerHTML = reply.replace(/\n/g, "<br>");
     messages.push({ role: "assistant", content: reply });
     chat.scrollTop = chat.scrollHeight;
+
   } catch {
     thinkingDiv.textContent = "⚠️ حدث خطأ أثناء الاتصال بالخدمة.";
   } finally {
@@ -310,9 +341,11 @@ async function sendMsg() {
     sendBtn.disabled = false;
   }
 }
-/* إرسال عند الضغط */
+
+/* 📤 عند الضغط على زر الإرسال */
 sendBtn.addEventListener("click", () => { if (!isThinking) sendMsg(); });
-/* إدخال ديناميكي */
+
+/* ⌨️ إدخال ديناميكي بدون Scroll */
 msg.addEventListener("input", () => {
   msg.style.height = "auto";
   msg.style.height = msg.scrollHeight + "px";
