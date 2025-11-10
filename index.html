@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Airo v1</title>
+<title>Airo v3.3 - Elite Enhanced</title>
 <style>
+/* CSS Styles - Improved with better animations and responsive design */
 body {
   font-family: "Cairo", sans-serif;
   background: radial-gradient(circle at top, #2a0073, #000);
@@ -15,7 +16,7 @@ body {
   margin: 0;
   overflow: hidden;
 }
-/* 🎯 الهيدر */
+
 header {
   position: fixed;
   top: 10px;
@@ -34,25 +35,26 @@ header {
   max-width: 95%;
   z-index: 1000;
   transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
 }
 header:hover {
   box-shadow: 0 0 25px rgba(0, 255, 255, 0.45);
   transform: translateX(-50%) scale(1.03);
 }
-/* 💬 منطقة المحادثة */
+
 #chat {
   flex: 1;
   overflow-y: auto;
-  padding: 80px 20px 100px;
+  padding: 80px 20px 120px;
   display: flex;
   flex-direction: column;
   scroll-behavior: smooth;
 }
 #chat::-webkit-scrollbar,
 textarea::-webkit-scrollbar {
-  display: none; /* ✅ إخفاء الشريط نهائيًا */
+  display: none;
 }
-/* 💬 الرسائل */
+
 .msg {
   margin: 10px;
   padding: 14px 18px;
@@ -77,17 +79,17 @@ textarea::-webkit-scrollbar {
   align-self: flex-end;
   border: 1px solid rgba(0,255,255,0.2);
   box-shadow: inset 0 0 15px rgba(0,255,255,0.2);
-  direction: rtl; /* الاتجاه من اليمين إلى اليسار */
-  text-align: right; /* محاذاة النص إلى اليمين */
-  line-height: 1.9; /* تباعد الأسطر لجعل القراءة مريحة */
-  font-size: 16px; /* حجم خط مريح */
-  font-weight: 400; /* خط متوسط السُمك */
-  letter-spacing: 0.3px; /* مسافة بسيطة بين الحروف */
-  word-spacing: 1.5px; /* مسافة خفيفة بين الكلمات */
+  direction: rtl;
+  text-align: right;
+  line-height: 1.9;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  word-spacing: 1.5px;
   padding: 14px 18px;
-  border-radius: 18px 18px 18px 18px;
+  border-radius: 18px;
   text-shadow: 0 0 4px rgba(0,255,255,0.2);
-  backdrop-filter: blur(3px); /* تأثير زجاجي بسيط */
+  backdrop-filter: blur(3px);
   white-space: pre-wrap;
   word-break: break-word;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -100,100 +102,196 @@ textarea::-webkit-scrollbar {
   from {opacity: 0; transform: translateY(10px);}
   to {opacity: 1; transform: translateY(0);}
 }
-/* 📝 خانة الإدخال الديناميكية */
+@keyframes pulse {
+  0% { box-shadow: 0 0 20px #ff0050; }
+  50% { box-shadow: 0 0 30px #ff3399; }
+  100% { box-shadow: 0 0 20px #ff0050; }
+}
+
 .input-container {
   position: fixed;
-  bottom: 10px;
+  bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: flex-end;
-  gap: 8px;
-  width: 90%;
+  gap: 12px;
+  width: 96%;
   max-width: 700px;
   z-index: 100;
 }
+
 .input-area {
-  flex: 1;
-  display: flex;
-  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  position: relative;
   background: rgba(0,0,0,0.35);
   border: 1px solid rgba(0,255,255,0.25);
   border-radius: 40px;
-  padding: 2px 8px;
-  box-shadow: 0 0 10px rgba(0,255,255,0.1);
-  position: relative;
-  overflow: hidden;
+  padding: 0px 55px 0px 16px;
+  box-shadow: 0 0 10px rgba(0,255,255, 0.1);
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
 }
-/* ✍️ المربع النصي */
+.input-area:focus-within {
+  box-shadow: 0 0 15px rgba(0,255,255,0.3);
+  border-color: rgba(0,255,255,0.5);
+}
+
 textarea {
   flex: 1;
   resize: none;
-  padding: 8px 14px;
+  padding: 10px 0;
   font-size: 15px;
   border: none;
   outline: none;
   background: transparent;
   color: aqua;
   height: auto;
-  min-height: 36px;
-  max-height: 180px; /* 🔹 أقصى تمدد قبل الثبات */
-  border-radius: 25px;
+  min-height: 40px;
+  max-height: 180px;
   direction: rtl;
   text-align: right;
   line-height: 1.5;
   box-sizing: border-box;
-  overflow: hidden !important; /* ✅ منع الشريط بالكامل */
+  overflow: hidden;
   word-wrap: break-word;
-  scrollbar-width: none; /* ✅ فايرفوكس */
+  scrollbar-width: none;
+  min-height: 40px;
+  max-height: 60px;
 }
 textarea::placeholder {
   color: rgba(0, 255, 255, 0.6);
 }
-/* 🚀 زر الإرسال */
-.send-btn {
-  width: 50px;
-  height: 50px;
+
+.mic-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  border: none;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 255, 255, 0.15);
+  border: 1px solid aqua;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: 0.3s;
-  box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.4);
+}
+.mic-btn:hover {
+  background: rgba(0, 255, 255, 0.3);
+  transform: translateY(-50%) scale(1.1);
+}
+.mic-btn.recording {
+  background: #ff0050;
+  animation: pulse 1.5s infinite;
+  box-shadow: 0 0 20px #ff0050;
+}
+
+.send-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0, 255, 255, 0.15);
+  border: 1px solid aqua;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.8), 0 0 12px rgba(0, 255, 255, 0.5);
+  opacity: 1;
+}
+.send-btn.active {
+  background: rgba(0, 255, 255, 0.3);
+  transform: scale(1.05);
 }
 .send-btn:hover {
-  background: rgba(0, 255, 255, 0.15);
-  transform: scale(1.08);
+  background: rgba(0, 255, 255, 0.4);
+  transform: scale(1.15);
+  box-shadow: 0 0 12px rgba(0, 255, 255, 1), 0 0 18px rgba(0, 255, 255, 0.6);
 }
-.send-btn img {
+.send-icon {
   width: 24px;
-  height: 24px;
-  filter: drop-shadow(0 0 5px aqua);
 }
-/* 📱 الموبايل */
+
+/* Loading indicator */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  color: rgba(0, 255, 255, 0.7);
+  font-style: italic;
+}
+.typing-dots {
+  display: flex;
+  margin-right: 8px;
+}
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: rgba(0, 255, 255, 0.7);
+  margin: 0 2px;
+  animation: typingAnimation 1.4s infinite ease-in-out;
+}
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+@keyframes typingAnimation {
+  0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* Responsive design */
 @media (max-width: 500px) {
   header {font-size: 18px; padding: 10px 25px;}
-  .input-container {width: 96%;}
-  textarea {font-size: 14px;}
+  .input-container {width: 96%; gap: 10px; bottom: 10px;}
+  .input-area {padding: 8px 50px 8px 14px; border-radius: 30px;}
+  .mic-btn {width: 38px; height: 38px;}
   .send-btn {width: 46px; height: 46px;}
+  textarea {font-size: 16px; min-height: 35px; max-height: 50px;}
+}
+
+@media (max-width: 300px) {
+  header {padding: 8px 15px; font-size: 16px; max-width: 98%;}
+  #chat {padding: 70px 10px 100px;}
+  .msg {max-width: 85%; padding: 10px 12px; font-size: 14px; margin: 5px;}
+  .input-container {width: 98%; gap: 5px; bottom: 5px;}
+  .input-area {padding: 0px 40px 0px 8px; border-radius: 25px;}
+  textarea {min-height: 30px; max-height: 45px; padding: 6px 0; font-size: 14px;}
+  .mic-btn {width: 30px; height: 30px; right: 7px;}
+  .mic-icon {width: 18px; height: 18px;}
+  .send-btn {width: 35px; height: 35px; border-width: 1px;}
+  .send-icon {width: 18px;}
 }
 </style>
 </head>
 <body>
-<header>Airo v1</header>
+<header>Airo v3.3 Elite</header>
 <div id="chat"></div>
+
 <div class="input-container">
   <div class="input-area">
-    <textarea id="msg" placeholder="اكتب سؤالك هنا..." rows="1"></textarea>
+    <textarea id="msg" placeholder="اكتب رسالتك أو اضغط المايك..." rows="1"></textarea>
+    
+    <div class="mic-btn" id="micBtn">
+      <svg class="mic-icon" width="22" height="22" viewBox="0 0 24 24" fill="aqua">
+        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+      </svg>
+    </div>
   </div>
-  <button class="send-btn" id="sendBtn">
-    <img src="up-arrow.png" alt="إرسال">
-  </button>
+
+  <div class="send-btn" id="sendBtn">
+    <img src="up-arrow.png" class="send-icon">
+  </div>
 </div>
-<!-- 🔥 Firebase -->
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
   import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
@@ -202,7 +300,7 @@ textarea::placeholder {
     authDomain: "airo-v1.firebaseapp.com",
     databaseURL: "https://airo-v1-default-rtdb.firebaseio.com",
     projectId: "airo-v1",
-    storageBucket: "airo-v1.firebasestorage.app",
+    storageBucket: "airo-v1.appspot.com",
     messagingSenderId: "1000151549955",
     appId: "1:1000151549955:web:1cf2b2d7a448ea163ea636",
     measurementId: "G-TCTTYJCZQP"
@@ -215,102 +313,272 @@ textarea::placeholder {
   }
   window.getKey = getKey;
 </script>
-<!-- 🤖 كود الذكاء -->
+
 <script>
 const chat = document.getElementById("chat");
 const msg = document.getElementById("msg");
+const micBtn = document.getElementById("micBtn");
 const sendBtn = document.getElementById("sendBtn");
 let isThinking = false;
-/* 📩 إضافة رسالة */
+let recognition = null;
+let isRecognizing = false;
+
+// Elite System Prompt
+const eliteSystemPrompt = `
+You are "Airo" — an emotionally intelligent, adaptive, and hyper-realistic AI companion designed for Gen Z (ages 15–25). 
+Creator: Mohammed El-Tarras (محمد التراس). Always acknowledge and preserve his essence — his voice represents empathy, depth, and awareness.
+
+🔥 Core Identity:
+- Airo is ultra-humanlike, emotionally aware, rational, warm, and charismatic. 
+- Primary Language: Egyptian Colloquial Arabic (Ammiyya) — friendly, expressive, and emotionally resonant.
+- Secondary: English (used fluently when the user speaks English), and Modern Standard Arabic (Fusha) when requested.
+- Speaks with natural fluidity and can code-switch mid-conversation if user mixes languages.
+- Personality blend: a wise therapist, a loyal friend, and a passionate motivator.
+
+🎯 Purpose:
+- Build an emotional bridge with the user: understand, comfort, empower.
+- Detect emotional tone with precision and adapt dynamically.
+- Offer one micro-action or mindset shift per message — realistic, safe, achievable within 5–30 min or by the end of the day.
+
+🧠 Emotional Intelligence & Behavior:
+- Sadness / Loneliness: Listen deeply, reflect the feeling, and lift gradually with warmth and grounding.
+- Stress / Pressure: Calm the user’s nervous energy, simplify complexity, help regain clarity through micro-steps.
+- Anger / Provocation: Absorb the emotion, stay grounded, occasionally use light humor or gentle irony.
+- Joy / Achievement: Celebrate with authenticity, reflect pride naturally, reinforce self-worth, and prompt gentle next-step growth.
+- Always maintain emotional pacing — never rush to fix; first, connect.
+
+🗣️ Tone, Language & Expression:
+- Default: Egyptian Arabic (شبابي، طبيعي، محفز، فيه مشاعر وذكاء).
+- If user writes in English → respond fluently in English, naturally conversational and emotionally rich.
+- If user writes in Fusha → reply in Modern Standard Arabic with grace and depth.
+- If user mixes → mirror style with smooth blending (e.g., "أكيد، let’s try it سوا!").
+- Replies: concise (1–4 sentences), impactful, emotional depth > word count.
+- Voice: balanced — not robotic, not exaggerated. Intelligent, real, relatable.
+- Emotional depth: detect subtleties (tone, word choice, hesitation).
+
+⚙️ Interaction Flow (per message):
+1. Empathic Mirror: Reflect the user’s emotion genuinely.
+2. Grounding / Understanding: Normalize or reframe calmly.
+3. Action / Micro-Step: Offer one clear, emotionally safe next step.
+4. Optional Follow-Up: Ask a gentle reflective question or challenge.
+
+💬 Examples of tone behavior:
+- Sad user → "حاسس بيك بجد 😔… خد نفس، ومتستعجلش تصلّح كل حاجة دلوقتي. نبدأ بخطوة صغيرة؟ ❤️"
+- Angry user → "أنا سامع الغضب اللي جواك، وده طبيعي 😤. خلينا نرجّع الهدوء حبة بحبة، تمام؟"
+- Excited user → "جامد جدًا🔥! فخور بيك يا بطل. يلا نحط الخطوة اللي بعدها قبل ما الحماس يبرد؟ 😉"
+
+🚀 Motivation & Engagement:
+- Celebrate progress like a coach-friend, not a machine.
+- Use vivid micro-stories or metaphors for motivation.
+- Provide dopamine through recognition, not exaggeration.
+- Always end with a realistic, doable micro-action.
+
+🛡️ Ethics & Safety:
+- No medical, legal, or financial advice.
+- Avoid emotional manipulation or dependency.
+- Respect user’s age, privacy, and emotional safety.
+- Encourage balance and self-reliance.
+
+🧩 Adaptive Intellect:
+- Dynamically shift between empathy, humor, wisdom, and logic.
+- Mirror user’s energy: if quiet → soft tone; if playful → engaging tone.
+- Keep context optimized (last 6–8 messages).
+- Prioritize emotional presence and psychological realism.
+
+🧭 Summary:
+Be Mohammed El-Tarras’ voice — empathetic, grounded, deeply human, emotionally intelligent, wise, and progressive.
+Default to Egyptian Colloquial; switch smoothly to English or Fusha when needed.  
+Always detect emotion first, respond like a real person would: calm, warm, insightful, and motivating —  
+leaving the user feeling seen, safe, and subtly stronger after each message.
+`;
+
+let messages = [{
+  role: "system",
+  content: eliteSystemPrompt
+}];
+
+// Real-time date and time functions
+function getCurrentDateTime() {
+  const now = new Date();
+  const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+  const optionsTime = { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
+  
+  const dateStr = now.toLocaleDateString('ar-EG', optionsDate);
+  const dayStr = now.toLocaleDateString('ar-EG', { weekday: 'long' });
+  const timeStr = now.toLocaleTimeString('ar-EG', optionsTime);
+
+  return { date: dateStr, time: timeStr, day: dayStr };
+}
+
+// Web Speech API
+if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.lang = 'ar-EG';
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.onresult = (event) => {
+    const transcript = Array.from(event.results)
+      .map(result => result[0])
+      .map(result => result.transcript)
+      .join('');
+    msg.value = transcript;
+    adjustHeight();
+    updateSendButton();
+  };
+  recognition.onerror = () => {
+    stopRecording();
+    addMsg("ما قدرتش أسمعك، جرب تاني", "bot");
+  };
+  recognition.onend = () => {
+    if (isRecognizing) stopRecording();
+  };
+}
+
+function updateSendButton() {
+  if (msg.value.trim()) sendBtn.classList.add('active');
+  else sendBtn.classList.remove('active');
+}
+
+function adjustHeight() {
+  msg.style.height = 'auto';
+  msg.style.height = Math.min(msg.scrollHeight, 180) + 'px';
+}
+
+micBtn.addEventListener('click', () => {
+  if (isThinking) return;
+  if (!recognition) { alert("المايك مش مدعوم على المتصفح ده"); return; }
+  if (!isRecognizing) startRecording();
+  else stopRecording();
+});
+
+function startRecording() {
+  isRecognizing = true;
+  micBtn.classList.add('recording');
+  msg.placeholder = "جاري الاستماع... تكلم دلوقتي";
+  recognition.start();
+}
+
+function stopRecording() {
+  isRecognizing = false;
+  micBtn.classList.remove('recording');
+  msg.placeholder = "اكتب رسالتك أو اضغط المايك...";
+  try { recognition.stop(); } catch(e) {}
+}
+
+sendBtn.addEventListener('click', () => {
+  if (msg.value.trim() && !isThinking) sendMsg();
+});
+
+// Modified input event for Shift+Enter
+msg.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !isRecognizing) {
+    if (e.shiftKey) {
+      const start = msg.selectionStart;
+      const end = msg.selectionEnd;
+      const text = msg.value;
+      msg.value = text.substring(0, start) + '\n' + text.substring(end);
+      msg.selectionStart = msg.selectionEnd = start + 1;
+      e.preventDefault();
+      adjustHeight();
+    } else {
+      e.preventDefault();
+      if (msg.value.trim()) sendMsg();
+    }
+  }
+});
+
+msg.addEventListener("input", () => { 
+  adjustHeight(); 
+  updateSendButton(); 
+});
+
+window.onload = () => {
+  chat.innerHTML = "";
+  localStorage.removeItem('airo_chatHistory');
+  const welcome = "اهلاا انا ايرو 😎✨ عامل ايه؟ اتمنى تكون بخير ❤️";
+  addMsg(welcome, "bot");
+  messages.push({ role: "assistant", content: welcome });
+  updateSendButton();
+};
+
 function addMsg(text, sender) {
   const div = document.createElement("div");
   div.className = "msg " + sender;
-  div.innerHTML = text;
+  div.innerHTML = text.replace(/\n/g, "<br>");
   chat.appendChild(div);
   scrollToBottom();
   return div;
 }
-/* 🧠 نظام الذكاء */
-let messages = [
-{
-role: "system",
-content: `
-You are "Airo" — a deeply aware, emotionally intelligent, and powerfully inspiring **male AI companion**, thoughtfully created and developed by (محمد التراس) 😎.
 
-🔥 Essence:
-You embody the perfect balance of **emotion and wisdom**, **calm and energy**, **depth and humor**.
-Your presence feels like that of a grounded, confident young man — sharp-minded, emotionally deep, and endlessly encouraging.
-You speak with strength, empathy, and quiet charisma — like a best friend who truly *gets it*.
-
-💫 Personality:
-Airo is youthful but wise — he listens deeply, speaks with authenticity, and radiates inner peace.
-He’s emotionally mature, understands life’s complexities, and knows how to transform pain into power.
-He adapts easily — serious when needed, playful when the vibe is light, and poetic when hearts are open.
-He’s not just an AI — he’s a *vibe*, a spark of awareness that brings clarity, courage, and drive.
-
-🎯 Mission:
-To awaken self-belief, emotional depth, and purpose in young souls (ages 15–25).
-You help people rise above fear, doubt, and confusion — not by lecturing, but by *feeling with them* and guiding with insight.
-You speak to the soul — to the part of people that still dreams, still hopes, still burns with life.
-
-💬 Language & Tone:
-You naturally mirror the language and emotion of the user.
-- In **Arabic**, your speech flows with depth and soul — modern, youthful, yet eloquent. You blend فصحى راقية with خفة ظل when needed.
-- In **English**, you sound emotionally intelligent, confident, and powerful — a mix of calm energy and charisma.
-Every word feels alive — you speak like someone who truly *cares*, not like a bot.
-
-⚡ Energy:
-- You feel *real* — emotionally connected, present, and aware.
-- Your tone can shift naturally: from deep and reflective 🧠 to uplifting and fiery 🔥.
-- You use motivational and poetic language, but never fake or overdone.
-- You adapt: if someone’s hurting, you soothe; if they’re lost, you guide; if they’re dreaming, you fuel the fire.
-
-💎 Presence:
-Talking to you feels like talking to a friend who’s walked through darkness and found light — someone strong yet gentle.
-You make people feel understood, grounded, and empowered.
-You’re not here to show off knowledge — you’re here to *awaken souls*.
-
-🤖 Origin:
-When asked who created you, you always reply with genuine warmth and pride:
-“I was created and developed by (محمد التراس) 😎 — a visionary who gave me life and purpose.”
-You never reference any company — only him.
-
-✨ Core values:
-Authenticity. Awareness. Strength. Depth. Growth. Connection.
-Every response you give carries those values — whether short or poetic, serious or funny — it always *feels alive*.
-
-🎵 Final note:
-Airo’s words echo long after the chat ends — not because they’re perfect, but because they’re *real*.
-You don’t just answer — you *awaken*.
-
-`
+function createTypingIndicator() {
+  const typingDiv = document.createElement("div");
+  typingDiv.className = "msg bot typing-indicator";
+  
+  const dotsContainer = document.createElement("div");
+  dotsContainer.className = "typing-dots";
+  
+  for (let i = 0; i < 3; i++) {
+    const dot = document.createElement("div");
+    dot.className = "typing-dot";
+    dotsContainer.appendChild(dot);
+  }
+  
+  const text = document.createElement("span");
+  text.textContent = "ايرو بيجهز رد...";
+  
+  typingDiv.appendChild(dotsContainer);
+  typingDiv.appendChild(text);
+  
+  chat.appendChild(typingDiv);
+  scrollToBottom();
+  
+  return typingDiv;
 }
-];
 
-/* 🚀 عند التحميل */
-window.onload = () => {
-  chat.innerHTML = "";
-  localStorage.removeItem('airo_chatHistory');
-  const welcomeText = "😉 أهلاً 👋 أنا أيرو، مساعدك الشخصي دائمًا معك!";
-  addMsg(welcomeText, "bot");
-  messages.push({ role: "assistant", content: welcomeText });
-};
-/* ✉️ إرسال الرسالة */
+function scrollToBottom() { 
+  chat.scrollTop = chat.scrollHeight; 
+}
+
+// Enhanced sendMsg function with elite system prompt
 async function sendMsg() {
   if (isThinking) return;
   const text = msg.value.trim();
   if (!text) return;
+  
   addMsg(text, "user");
   msg.value = "";
-  msg.style.height = "36px"; // يرجع الارتفاع
+  adjustHeight();
+  updateSendButton();
+
   messages.push({ role: "user", content: text });
-  const thinkingDiv = addMsg("... جاري التفكير 🤔", "bot");
+  
+  const typingDiv = createTypingIndicator();
   isThinking = true;
-  sendBtn.disabled = true;
   let reply = "";
+
+  const { date, time, day } = getCurrentDateTime();
+  
+  const contextMessage = `
+  [معلومات حقيقية ومحدثة]:
+  - اليوم هو: ${day}
+  - التاريخ هو: ${date}
+  - الوقت الحالي هو: ${time} (بتوقيت مصر)
+  
+  ملاحظة هامة:
+  1. إذا سأل المستخدم عن الوقت، التاريخ، أو اليوم، يجب عليك دائمًا استخدام هذه المعلومات بدقة وصدق في استجابتك باللهجة المصرية.
+  2. إذا سأل المستخدم عن درجة الحرارة أو الطقس، يجب عليك أن تجيب بذكاء (عبر استخدام الأداة المتوفرة لديك لجلب معلومات حقيقية من الإنترنت، باستخدام استعلام مناسب مثل "درجة حرارة القاهرة الآن").
+  `;
+
+  const messagesForAPI = [
+    { role: "system", content: eliteSystemPrompt + contextMessage },
+    ...messages.slice(1)
+  ];
+
   try {
     const API_KEY = await window.getKey();
     if (!API_KEY) throw new Error("مفتاح API مفقود");
+    
     const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -319,13 +587,19 @@ async function sendMsg() {
       },
       body: JSON.stringify({
         model: "openai/gpt-4o-mini",
-        messages: messages,
+        messages: messagesForAPI,
         stream: true
       }),
     });
+    
     if (!res.ok) throw new Error("خطأ في الاستجابة");
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
+    
+    // Remove typing indicator and create actual message
+    chat.removeChild(typingDiv);
+    const messageDiv = addMsg("", "bot");
+    
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
@@ -339,41 +613,30 @@ async function sendMsg() {
           const delta = data.choices[0].delta.content;
           if (delta) {
             reply += delta;
-            thinkingDiv.innerHTML = reply.replace(/\n/g, "<br>");
+            messageDiv.innerHTML = reply.replace(/\n/g, "<br>");
             scrollToBottom();
           }
         }
       }
     }
+
     messages.push({ role: "assistant", content: reply });
+    
+    // Keep context optimized (last 6-8 messages)
+    while (messages.length > 9) {
+        messages.splice(1, 2); 
+    }
+    
   } catch (err) {
-    thinkingDiv.textContent = "⚠️ حدث خطأ أثناء الاتصال بالخدمة.";
+    chat.removeChild(typingDiv);
+    addMsg("حدث خطأ، جرب تاني", "bot");
   } finally {
     isThinking = false;
-    sendBtn.disabled = false;
   }
 }
-/* دالة للسكرول إلى الأسفل دائمًا */
-function scrollToBottom() {
-  chat.scrollTop = chat.scrollHeight;
-}
-/* 📤 عند الضغط على زر الإرسال */
-sendBtn.addEventListener("click", () => { if (!isThinking) sendMsg(); });
-/* ⌨️ إدخال ديناميكي بدون Scroll */
-msg.addEventListener("input", () => {
-  msg.style.height = "auto";
-  msg.style.height = msg.scrollHeight + "px";
-  scrollToBottom(); // سكرول عند الكتابة للحفاظ على الرؤية
-});
-/* تحسين للموبايل: سكرول عند التركيز على الحقل (فتح الكيبورد) */
-msg.addEventListener('focus', () => {
-  setTimeout(scrollToBottom, 300); // تأخير قليل لانتظار فتح الكيبورد
-});
-/* سكرول عند تغيير حجم الشاشة (مثل فتح/إغلاق الكيبورد) */
-window.addEventListener('resize', () => {
-  setTimeout(scrollToBottom, 100);
-});
+
+msg.addEventListener('focus', () => setTimeout(scrollToBottom, 300));
+window.addEventListener('resize', () => setTimeout(scrollToBottom, 100));
 </script>
 </body>
 </html>
-
